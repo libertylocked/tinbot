@@ -1,9 +1,10 @@
 """Messaging functionalities of tinder bot"""
+import datetime
 
 def get_unreplied_messages(session, since):
     """Gets the messages that are sent by the match, but not replied by me yet
     Returns an array of (message, match) tuples"""
-    print "Getting unreplied messages since", since
+    print "Getting unreplied messages", datetime.datetime.now()
     #since_str = since.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     unreplied_messages = []
     matches = session.matches()

@@ -23,14 +23,15 @@ def main():
             print request_error.message
             fb_auth.delete_access_token_file()
 
+    # All messages before start_time will be ignored
+    start_time = datetime.datetime.strptime('Jan 1 2016  1:00AM', '%b %d %Y %I:%M%p')
+    #start_time = datetime.datetime.utcnow()
+
     # Run this in a loop
     bots_map = {}
-    #last_poll = datetime.datetime.strptime('Jan 1 2017  1:00AM', '%b %d %Y %I:%M%p')
-    last_poll = datetime.datetime.utcnow()
     while True:
         # Get new unreplied messages
-        unreplied_messages = messaging.get_unreplied_messages(session, last_poll)
-        last_poll = datetime.datetime.utcnow()
+        unreplied_messages = messaging.get_unreplied_messages(session, start_time)
         # Use bot to reply to unreplied messages
         for message_tuple in unreplied_messages:
             the_message = message_tuple[0]
