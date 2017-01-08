@@ -4,6 +4,7 @@ import time
 
 import pynder
 import fb_auth
+import messaging
 from cleverbot import Cleverbot
 
 
@@ -24,10 +25,11 @@ def main():
 
     # Run this in a loop
     bots_map = {}
+    #last_poll = datetime.datetime.strptime('Jan 1 2017  1:00AM', '%b %d %Y %I:%M%p')
     last_poll = datetime.datetime.utcnow()
     while True:
         # Get new unreplied messages
-        unreplied_messages = get_unreplied_messages(session, last_poll)
+        unreplied_messages = messaging.get_unreplied_messages(session, last_poll)
         last_poll = datetime.datetime.utcnow()
         # Use bot to reply to unreplied messages
         for message_tuple in unreplied_messages:
@@ -37,7 +39,7 @@ def main():
             print bot_reply
             print the_match.message(bot_reply)
         # Wait a while before polling
-        time.sleep(10)
+        time.sleep(30)
 
     print "Exiting"
 
@@ -53,25 +55,6 @@ def get_bot_for_user(bots_map, user):
         print "Creating new CB session for", user.id, user.name, user.jobs
         bots_map[user.id] = Cleverbot()
     return bots_map[user.id]
-
-def get_unreplied_messages(session, since):
-    """Gets the messages that are sent by the match, but not replied by me yet
-    Returns an array of (message, match) tuples"""
-    print "Getting updates since", since
-    since_str = since.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    unreplied_messages = []
-    #matches = session.matches()
-    matches = session.matches(since_str)
-    my_profile = session.profile
-    for match in matches:
-        match_messages = match.messages
-        if len(match_messages) == 0:
-            continue
-        last_message = match_messages[-1]
-        if last_message.to.id == my_profile.id:
-            print last_message
-            unreplied_messages.append((last_message, match))
-    return unreplied_messages
 
 if __name__ == "__main__":
     main()

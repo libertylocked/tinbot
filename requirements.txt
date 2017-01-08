@@ -1,0 +1,5 @@
+pip install pytz
+pip install robobrowser
+pip install cleverbot
+
+pip install pynder
