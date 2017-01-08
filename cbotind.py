@@ -24,9 +24,11 @@ def main():
 
     # Run this in a loop
     bots_map = {}
+    last_poll = datetime.datetime.utcnow()
     while True:
-        since = datetime.datetime.utcnow()
-        unreplied_messages = get_unreplied_messages(session, since)
+        # Get new unreplied messages
+        unreplied_messages = get_unreplied_messages(session, last_poll)
+        last_poll = datetime.datetime.utcnow()
         # Use bot to reply to unreplied messages
         for message_tuple in unreplied_messages:
             the_message = message_tuple[0]
@@ -34,7 +36,7 @@ def main():
             bot_reply = get_bot_reply(bots_map, the_match.user, the_message.body)
             print bot_reply
             print the_match.message(bot_reply)
-        # Wait a while before polling so that we don't get banned by Tinder
+        # Wait a while before polling
         time.sleep(10)
 
     print "Exiting"
@@ -55,6 +57,7 @@ def get_bot_for_user(bots_map, user):
 def get_unreplied_messages(session, since):
     """Gets the messages that are sent by the match, but not replied by me yet
     Returns an array of (message, match) tuples"""
+    print "Getting updates since", since
     since_str = since.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     unreplied_messages = []
     #matches = session.matches()
