@@ -30,15 +30,18 @@ def main():
     # Run this in a loop
     bots_map = {}
     while True:
-        # Get new unreplied messages
-        unreplied_messages = messaging.get_unreplied_messages(session, start_time)
-        # Use bot to reply to unreplied messages
-        for message_tuple in unreplied_messages:
-            the_message = message_tuple[0]
-            the_match = message_tuple[1]
-            bot_reply = get_bot_reply(bots_map, the_match.user, the_message.body)
-            print bot_reply
-            print the_match.message(bot_reply)
+        try:
+            # Get new unreplied messages
+            unreplied_messages = messaging.get_unreplied_messages(session, start_time)
+            # Use bot to reply to unreplied messages
+            for message_tuple in unreplied_messages:
+                the_message = message_tuple[0]
+                the_match = message_tuple[1]
+                bot_reply = get_bot_reply(bots_map, the_match.user, the_message.body)
+                print bot_reply
+                print the_match.message(bot_reply)
+        except pynder.errors.RequestError as request_error:
+            print request_error.message
         # Wait a while before polling
         time.sleep(30)
 
