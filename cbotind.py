@@ -24,8 +24,8 @@ def main():
             fb_auth.delete_access_token_file()
 
     # All messages before start_time will be ignored
-    start_time = datetime.datetime.strptime('Jan 1 2016  1:00AM', '%b %d %Y %I:%M%p')
-    #start_time = datetime.datetime.utcnow()
+    #start_time = datetime.datetime.strptime('Jan 1 2017  1:00AM', '%b %d %Y %I:%M%p')
+    start_time = datetime.datetime.utcnow()
 
     # Run this in a loop
     bots_map = {}
@@ -49,6 +49,8 @@ def main():
 
 def get_bot_reply(bots_map, user, message_body):
     """Gets the bot's reply for the user's message"""
+    # Encode message to UTF-8
+    message_body = message_body.encode('utf-8')
     bot = get_bot_for_user(bots_map, user)
     reply = bot.ask(message_body)
     return reply
