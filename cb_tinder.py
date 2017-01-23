@@ -1,4 +1,4 @@
-"""Cleverbot powered Tinder!"""
+"""Use Cleverbot to reply to messages"""
 import datetime
 import time
 
@@ -10,18 +10,7 @@ from cleverbot import Cleverbot
 
 def main():
     """Main method"""
-    logged_in = False
-    while not logged_in:
-        fb_token = fb_auth.get_access_token()
-        try:
-            print "Creating Tinder session..."
-            session = pynder.Session(fb_token)
-            print "Connected to Tinder!"
-            fb_auth.save_access_token_to_file(fb_token)
-            logged_in = True
-        except pynder.errors.RequestError as request_error:
-            print request_error.message
-            fb_auth.delete_access_token_file()
+    session = fb_auth.get_tinder_session()
 
     # All messages before start_time will be ignored
     #start_time = datetime.datetime.strptime('Jan 1 2017  1:00AM', '%b %d %Y %I:%M%p')
@@ -42,6 +31,10 @@ def main():
                 print the_match.message(bot_reply)
         except pynder.errors.RequestError as request_error:
             print request_error.message
+            if request_error.message == 401:
+                # Re-auth if getting 401
+                print "Re-auth"
+                session = fb_auth.get_tinder_session()
         # Wait a while before polling
         time.sleep(30)
 
@@ -59,7 +52,7 @@ def get_bot_for_user(bots_map, user):
     """Gets the bot created for the user"""
     if not bots_map.has_key(user.id):
         print "Creating new CB session for", user.id, user.name, user.jobs
-        bots_map[user.id] = Cleverbot()
+        bots_map[user.id] = Cleverbot("tinder-cb")
     return bots_map[user.id]
 
 if __name__ == "__main__":
