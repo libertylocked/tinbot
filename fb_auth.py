@@ -2,6 +2,7 @@
 import getpass
 import os
 import re
+import requests
 import pynder
 
 import robobrowser
@@ -73,15 +74,22 @@ def get_access_token():
         fb_token = get_fb_access_token(email_and_password)
     return fb_token
 
+def get_fb_id(access_token):
+    """Gets facebook ID from access token"""
+    req = requests.get('https://graph.facebook.com/me?access_token=' + access_token)
+    return req.json()["id"]
+
 def get_tinder_session():
     """Gets a tinder session"""
     logged_in = False
     session = None
     while not logged_in:
         fb_token = get_access_token()
+        # Get FB ID from access token
+        fb_id = get_fb_id(fb_token)
         try:
             print "Creating Tinder session..."
-            session = pynder.Session(fb_token)
+            session = pynder.Session(fb_id, fb_token)
             print "Connected to Tinder!"
             save_access_token_to_file(fb_token)
             logged_in = True
