@@ -16,6 +16,7 @@ def loop(session):
     """Runs through recommended users and run their photos thru cog services"""
     nearby = session.nearby_users()
     for hopeful in nearby:
+        print '==============================='
         # print user id
         print hopeful.id
         # filter rules
@@ -23,10 +24,11 @@ def loop(session):
             print 'Skipped ' + hopeful.name
             continue
         # print hopeful's info
-        print hopeful.name
-        print hopeful.schools
-        print hopeful.jobs
-        print hopeful.bio.encode('ascii', 'ignore')
+        print 'Name: ' + hopeful.name
+        print 'Age: ' + hopeful.age
+        print 'Schools: ' + hopeful.schools
+        print 'Jobs: ' + hopeful.jobs
+        print 'Bio: ' + hopeful.bio.encode('ascii', 'ignore')
         # send a post request to CV API
         for photo_url in hopeful.photos:
             print ' '
@@ -39,7 +41,6 @@ def loop(session):
             hopeful.like()
         elif swipe == 'n':
             hopeful.dislike()
-        print '==============================='
 
 def should_skip_profile(hopeful):
     """Skip profiles based on filter rules"""
