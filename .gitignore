@@ -95,3 +95,6 @@ ENV/
 
 # Secret tokens
 /token.txt
+
+# API keys in config
+/config_keys.py
