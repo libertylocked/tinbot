@@ -23,7 +23,7 @@ def loop(session):
             print 'Skipped ' + hopeful.name
             continue
         # print hopeful's info
-        print unicode(hopeful.name)
+        print hopeful.name
         print hopeful.schools
         print hopeful.jobs
         print hopeful.bio.encode('ascii', 'ignore')
@@ -32,6 +32,7 @@ def loop(session):
             print ' '
             print photo_url
             print get_cv_caption(photo_url)
+            print get_emotions(photo_url)
         # let user swipe
         swipe = raw_input('swipe y/n/s: ')
         if swipe == 'y':
@@ -58,6 +59,18 @@ def get_cv_caption(url):
     }
     response = requests.post(_CV_URL, json=json_data, headers=headers)
     return response.json()['description']['captions']
+
+def get_emotions(url):
+    """Gets emotions in JSON"""
+    headers = {
+        'Content-Type': 'application/json',
+        'Ocp-Apim-Subscription-Key': config_keys.EMOTION_KEY
+    }
+    json_data = {
+        'url': url
+    }
+    response = requests.post(_EMOTION_URL, json=json_data, headers=headers)
+    return response.json()
 
 if __name__ == "__main__":
     main()
