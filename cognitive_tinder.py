@@ -21,14 +21,14 @@ def loop(session):
         print hopeful.id
         # filter rules
         if should_skip_profile(hopeful):
-            print 'Skipped ' + hopeful.name
+            print 'Skipped', hopeful.name
             continue
         # print hopeful's info
-        print 'Name: ' + hopeful.name
-        print 'Age: ' + hopeful.age
-        print 'Schools: ' + hopeful.schools
-        print 'Jobs: ' + hopeful.jobs
-        print 'Bio: ' + hopeful.bio.encode('ascii', 'ignore')
+        print 'Name:', hopeful.name
+        print 'Age:', hopeful.age
+        print 'Schools:', hopeful.schools
+        print 'Jobs:', hopeful.jobs
+        print 'Bio:', hopeful.bio.encode('ascii', 'ignore')
         # send a post request to CV API
         for photo_url in hopeful.photos:
             print ' '
